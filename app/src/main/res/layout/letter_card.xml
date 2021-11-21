@@ -11,11 +11,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/letterRelativeLayout"
         android:padding="16dp"
         >
 
         <ImageView
+            android:id="@+id/letterImage"
             android:layout_width="40dp"
             android:layout_height="60dp"
             tools:layout_editor_absoluteX="16dp"
