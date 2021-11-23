@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 
-class LifeRecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+class LifeRecyclerAdapter: RecyclerView.Adapter<LifeRecyclerAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LifeRecyclerAdapter.ViewHolder {
         val inflater = LayoutInflater.from(parent.context).inflate(R.layout.life_card, parent, false)
         return ViewHolder(inflater)
@@ -19,5 +19,13 @@ class LifeRecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         init{
             lifeCard = cardView.findViewById(R.id.lifeImage)
         }
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getItemCount(): Int {
+        TODO("Not yet implemented")
     }
 }
