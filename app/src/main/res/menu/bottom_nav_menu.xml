@@ -7,13 +7,13 @@
         android:title="@string/title_game" />
 
     <item
-        android:id="@+id/navigation_highscore"
-        android:icon="@drawable/ic_highscore"
-        android:title="@string/title_highscore" />
-
-    <item
         android:id="@+id/navigation_end_message"
         android:icon="@drawable/ic_end_message"
         android:title="@string/title_end_message" />
+
+    <item
+        android:id="@+id/navigation_highscore"
+        android:icon="@drawable/ic_highscore"
+        android:title="@string/title_highscore" />
 
 </menu>
