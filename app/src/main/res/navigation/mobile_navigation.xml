@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_game"
-        android:name="com.example.s205452lykkehjulet.ui.GameFragment"
+        android:name="com.example.s205452lykkehjulet.UI.GameFragment"
         android:label="@string/title_game"
         tools:layout="@layout/fragment_game" />
 
     <fragment
         android:id="@+id/navigation_end_message"
-        android:name="com.example.s205452lykkehjulet.ui.EndMessageFragment"
+        android:name="com.example.s205452lykkehjulet.UI.EndMessageFragment"
         android:label="@string/title_end_message"
         tools:layout="@layout/fragment_end_message" />
 
     <fragment
         android:id="@+id/navigation_highscore"
-        android:name="com.example.s205452lykkehjulet.ui.HighscoreFragment"
+        android:name="com.example.s205452lykkehjulet.UI.HighscoreFragment"
         android:label="@string/title_highscore"
         tools:layout="@layout/fragment_highscore" />
 </navigation>

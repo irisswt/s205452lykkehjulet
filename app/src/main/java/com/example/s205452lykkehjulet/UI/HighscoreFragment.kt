@@ -1,4 +1,4 @@
-package com.example.s205452lykkehjulet.ui
+package com.example.s205452lykkehjulet.UI
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.s205452lykkehjulet.R
 
-class EndMessageFragment : Fragment() {
+class HighscoreFragment : Fragment() {
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -15,10 +16,11 @@ class EndMessageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view: View = inflater.inflate(R.layout.fragment_end_message, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_highscore, container, false)
 
 
         return view
     }
+
 
 }

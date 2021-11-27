@@ -7,22 +7,16 @@ class Word {
     val land = listOf<String>("Danmark", "Sverige")
     val by = listOf<String>("Ballerup", "Lyngby", "London", "Berlin")
     val kodesprog = listOf<String>("Kotlin", "Java", "Python")
+    var splitWord: List<String> = listOf()
 
-    fun generateWord(): String{
+    fun generateWord() :List<String>{
         val randomCategoryIndex = Random.nextInt(0,categories.size)
-        val category = categories[randomCategoryIndex]
-        if(category.lowercase().equals("land")){
-            val randomIndex = Random.nextInt(0,land.size)
-            return land[randomIndex].uppercase()
-        } else if(category.lowercase().equals("by")){
-            val randomIndex = Random.nextInt(0,by.size)
-            return by[randomIndex].uppercase()
+        val category = categories[randomCategoryIndex].lowercase()
+        when(category){
+            "land" -> splitWord = land[Random.nextInt(0,land.size)].uppercase().split("")
+            "by" -> splitWord =  by[Random.nextInt(0,by.size)].uppercase().split("")
+            "kodesprog" -> splitWord =  kodesprog[Random.nextInt(0,kodesprog.size)].uppercase().split("")
         }
-        else if(category.lowercase().equals("kodesprog")){
-            val randomIndex = Random.nextInt(0,kodesprog.size)
-            return kodesprog[randomIndex].uppercase()
-        }
-        else return "NULL"
-
+        return splitWord
     }
 }
