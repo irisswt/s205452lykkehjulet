@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.s205452lykkehjulet.Adapters.LetterRecyclerAdapter
+import com.example.s205452lykkehjulet.Game
 import com.example.s205452lykkehjulet.Letter
 import com.example.s205452lykkehjulet.R
 import com.example.s205452lykkehjulet.Word
@@ -38,15 +39,22 @@ class GameFragment : Fragment() {
         val guessed: TextView = view.findViewById(R.id.guessed_letters)
         var userGuess: String
 
+        for (i in word.indices) {
+            charList.add(Letter(word[i], false))
+        }
+
         button.setOnClickListener {
             userGuess = editText.text.toString().uppercase()
             text.text = userGuess
             guessed.append(userGuess + " ")
+            for(i in word.indices){
+                if(charList[i].equals(userGuess)){
+                    charList[i] = Letter(word[i], true)
+                }
+            }
         }
 
-        for (i in word.indices) {
-            charList.add(Letter(word[i], false))
-        }
+
 
         recyclerView.adapter = LetterRecyclerAdapter(charList)
 
@@ -61,6 +69,9 @@ class GameFragment : Fragment() {
 
 
         return view
+    }
+    fun lykkehjulet(){
+        var game = Game(5,0)
     }
 
 }
