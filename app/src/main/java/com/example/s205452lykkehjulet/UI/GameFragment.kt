@@ -1,7 +1,6 @@
 package com.example.s205452lykkehjulet.UI
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +19,9 @@ import com.example.s205452lykkehjulet.Word
 class GameFragment : Fragment() {
 
     private var charList = ArrayList<Letter>()
+    private var score: Int = 0
+    private lateinit var scoreText: TextView
+    private lateinit var lifeRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,9 +36,11 @@ class GameFragment : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_game, container, false)
         val button: Button = view.findViewById(R.id.spin_button)
         val text: TextView = view.findViewById(R.id.spin_text)
-        val recyclerView: RecyclerView = view.findViewById(R.id.letter_recycler_view)
+        val letterRecyclerView: RecyclerView = view.findViewById(R.id.letter_recycler_view)
+        lifeRecyclerView = view.findViewById(R.id.life_recycler_view)
         val editText: EditText = view.findViewById(R.id.guess_text)
         val guessed: TextView = view.findViewById(R.id.guessed_letters)
+        scoreText = view.findViewById(R.id.score)
         var userGuess: String
 
         for (i in word.indices) {
@@ -52,16 +56,17 @@ class GameFragment : Fragment() {
                     charList[i] = Letter(word[i], true)
                 }
             }
+            lykkehjulet()
         }
 
 
 
-        recyclerView.adapter = LetterRecyclerAdapter(charList)
+        letterRecyclerView.adapter = LetterRecyclerAdapter(charList)
 
         // https://www.tutorialspoint.com/how-to-create-horizontal-listview-in-android-using-kotlin
         val linearLayoutManager = LinearLayoutManager(view.context)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-        recyclerView.layoutManager = linearLayoutManager
+        letterRecyclerView.layoutManager = linearLayoutManager
 
 
 
@@ -72,6 +77,8 @@ class GameFragment : Fragment() {
     }
     fun lykkehjulet(){
         var game = Game(5,0)
+        scoreText.setText("Score: " + game.score.toString())
+
     }
 
 }
