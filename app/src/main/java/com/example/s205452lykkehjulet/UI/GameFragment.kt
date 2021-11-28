@@ -1,10 +1,12 @@
 package com.example.s205452lykkehjulet.UI
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,9 +34,14 @@ class GameFragment : Fragment() {
         val button: Button = view.findViewById(R.id.spin_button)
         val text: TextView = view.findViewById(R.id.spin_text)
         val recyclerView: RecyclerView = view.findViewById(R.id.letter_recycler_view)
+        val editText: EditText = view.findViewById(R.id.guess_text)
+        val guessed: TextView = view.findViewById(R.id.guessed_letters)
+        var userGuess: String
 
         button.setOnClickListener {
-            text.text = word.toString()
+            userGuess = editText.text.toString().uppercase()
+            text.text = userGuess
+            guessed.append(userGuess + " ")
         }
 
         for (i in word.indices) {
@@ -47,6 +54,9 @@ class GameFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(view.context)
         linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         recyclerView.layoutManager = linearLayoutManager
+
+
+
 
 
 
