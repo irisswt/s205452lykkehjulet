@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="@id/life_recycler_view"
         android:textSize="40dp"
         android:visibility="visible"
-
+        android:textColor="@color/black"
 
         />
 

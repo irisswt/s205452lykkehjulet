@@ -1,6 +1,7 @@
 package com.example.s205452lykkehjulet.UI
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,22 +47,27 @@ class GameFragment : Fragment() {
         for (i in word.indices) {
             charList.add(Letter(word[i], false))
         }
+        var letterAdapter = LetterRecyclerAdapter(charList)
+        letterRecyclerView.adapter = letterAdapter
 
         button.setOnClickListener {
             userGuess = editText.text.toString().uppercase()
             text.text = userGuess
             guessed.append(userGuess + " ")
             for(i in word.indices){
-                if(charList[i].equals(userGuess)){
+                if(charList[i].letter.equals(userGuess)){
                     charList[i] = Letter(word[i], true)
+                    Log.e("Linje 60", "onCreateView: " + "Dit gættede bogstav: " + word[i] )
+                    letterAdapter.notifyDataSetChanged()
                 }
+                Log.e("Linje 63", "onCreateView: " + "Dit gættede bogstav: " + word[i] + userGuess)
             }
             lykkehjulet()
         }
 
 
 
-        letterRecyclerView.adapter = LetterRecyclerAdapter(charList)
+
 
         // https://www.tutorialspoint.com/how-to-create-horizontal-listview-in-android-using-kotlin
         val linearLayoutManager = LinearLayoutManager(view.context)
