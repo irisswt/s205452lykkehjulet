@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.s205452lykkehjulet.Adapters.LetterRecyclerAdapter
+import com.example.s205452lykkehjulet.Adapters.LifeRecyclerAdapter
 import com.example.s205452lykkehjulet.Game
 import com.example.s205452lykkehjulet.Letter
 import com.example.s205452lykkehjulet.R
@@ -20,6 +21,8 @@ import com.example.s205452lykkehjulet.Word
 class GameFragment : Fragment() {
 
     private var charList = ArrayList<Letter>()
+    private var guessedLetters = ArrayList<String>()
+    private var isGuessed: Boolean = false
     private var score: Int = 0
     private lateinit var scoreText: TextView
     private lateinit var lifeRecyclerView: RecyclerView
@@ -29,7 +32,7 @@ class GameFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var word: List<String> = listOf()
+        var word: List<String>
         val wordGenerator = Word()
         word = wordGenerator.generateWord()
 
@@ -50,18 +53,30 @@ class GameFragment : Fragment() {
         var letterAdapter = LetterRecyclerAdapter(charList)
         letterRecyclerView.adapter = letterAdapter
 
+
         button.setOnClickListener {
             userGuess = editText.text.toString().uppercase()
             text.text = userGuess
-            guessed.append(userGuess + " ")
-            for(i in word.indices){
-                if(charList[i].letter.equals(userGuess)){
-                    charList[i] = Letter(word[i], true)
-                    Log.e("Linje 60", "onCreateView: " + "Dit gættede bogstav: " + word[i] )
-                    letterAdapter.notifyDataSetChanged()
+            for (i in guessedLetters.indices){
+                if(userGuess.equals(guessedLetters[i])){
+                    isGuessed = true
+                    break
                 }
-                Log.e("Linje 63", "onCreateView: " + "Dit gættede bogstav: " + word[i] + userGuess)
+                else{
+                    isGuessed = false
+                }
             }
+            if(!isGuessed){
+                guessedLetters.add(userGuess)
+                guessed.append(userGuess + " ")
+                for(i in word.indices){
+                    if(charList[i].letter.equals(userGuess)){
+                        charList[i] = Letter(word[i], true)
+                        letterAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
+            editText.setText("")
             lykkehjulet()
         }
 
@@ -84,6 +99,8 @@ class GameFragment : Fragment() {
     fun lykkehjulet(){
         var game = Game(5,0)
         scoreText.setText("Score: " + game.score.toString())
+        var lifeAdapter = LifeRecyclerAdapter(game.life)
+        lifeRecyclerView.adapter = lifeAdapter
 
     }
 
