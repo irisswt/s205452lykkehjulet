@@ -1,7 +1,6 @@
 package com.example.s205452lykkehjulet.UI
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +10,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.s205452lykkehjulet.*
 import com.example.s205452lykkehjulet.Adapters.LetterRecyclerAdapter
 import com.example.s205452lykkehjulet.Adapters.LifeRecyclerAdapter
-import com.example.s205452lykkehjulet.Game
-import com.example.s205452lykkehjulet.Letter
-import com.example.s205452lykkehjulet.R
-import com.example.s205452lykkehjulet.Word
 
 class GameFragment : Fragment() {
 
@@ -24,8 +20,10 @@ class GameFragment : Fragment() {
     private var guessedLetters = ArrayList<String>()
     private var isGuessed: Boolean = false
     private var score: Int = 0
+    private var gamePhase = GamePhase.SPIN
     private lateinit var scoreText: TextView
     private lateinit var lifeRecyclerView: RecyclerView
+    var game = Game(5,0)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,6 +50,11 @@ class GameFragment : Fragment() {
         }
         var letterAdapter = LetterRecyclerAdapter(charList)
         letterRecyclerView.adapter = letterAdapter
+
+        scoreText.setText("Score: " + game.score.toString())
+        var lifeAdapter = LifeRecyclerAdapter(5)
+        lifeRecyclerView.adapter = lifeAdapter
+        lifeAdapter.notifyDataSetChanged()
 
 
         button.setOnClickListener {
@@ -85,22 +88,20 @@ class GameFragment : Fragment() {
 
 
         // https://www.tutorialspoint.com/how-to-create-horizontal-listview-in-android-using-kotlin
-        val linearLayoutManager = LinearLayoutManager(view.context)
-        linearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-        letterRecyclerView.layoutManager = linearLayoutManager
+        val letterLinearLayoutManager = LinearLayoutManager(view.context)
+        letterLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        letterRecyclerView.layoutManager = letterLinearLayoutManager
 
-
-
+        val lifeLinearLayoutManager = LinearLayoutManager(view.context)
+        lifeLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        lifeRecyclerView.layoutManager = lifeLinearLayoutManager
 
 
 
         return view
     }
     fun lykkehjulet(){
-        var game = Game(5,0)
-        scoreText.setText("Score: " + game.score.toString())
-        var lifeAdapter = LifeRecyclerAdapter(game.life)
-        lifeRecyclerView.adapter = lifeAdapter
+
 
     }
 

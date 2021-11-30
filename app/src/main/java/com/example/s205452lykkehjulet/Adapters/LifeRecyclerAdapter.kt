@@ -14,17 +14,12 @@ class LifeRecyclerAdapter(var lives: Int): RecyclerView.Adapter<LifeRecyclerAdap
     }
 
 
-    inner class LifeViewHolder(cardView: View): RecyclerView.ViewHolder(cardView){
-        var lifeCard: CardView = cardView.findViewById(R.id.lifeImage)
+    class LifeViewHolder(cardView: View): RecyclerView.ViewHolder(cardView){
 
-        init{
-            lifeCard = cardView.findViewById(R.id.lifeImage)
-        }
     }
 
     override fun onBindViewHolder(holder: LifeViewHolder, position: Int) {
-        //val life = lives[position]
-        //holder.lifeCard = lives
+
     }
 
     override fun getItemCount(): Int {
