@@ -21,8 +21,16 @@ class GameFragment : Fragment() {
     private var isGuessed: Boolean = false
     private var score: Int = 0
     private var gamePhase = GamePhase.SPIN
+    private var gameInProgress: Boolean = true
     private lateinit var scoreText: TextView
     private lateinit var lifeRecyclerView: RecyclerView
+    private lateinit var userGuess: String
+    private lateinit var text: TextView
+    private lateinit var editText: EditText
+    private lateinit var guessed: TextView
+    private lateinit var word: List<String>
+    private lateinit var letterAdapter: LetterRecyclerAdapter
+
     var game = Game(5,0)
 
     override fun onCreateView(
@@ -30,25 +38,25 @@ class GameFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var word: List<String>
+
         val wordGenerator = Word()
         word = wordGenerator.generateWord()
 
         // Inflate the layout for this fragment
         val view: View = inflater.inflate(R.layout.fragment_game, container, false)
         val button: Button = view.findViewById(R.id.spin_button)
-        val text: TextView = view.findViewById(R.id.spin_text)
+        text = view.findViewById(R.id.spin_text)
         val letterRecyclerView: RecyclerView = view.findViewById(R.id.letter_recycler_view)
         lifeRecyclerView = view.findViewById(R.id.life_recycler_view)
-        val editText: EditText = view.findViewById(R.id.guess_text)
-        val guessed: TextView = view.findViewById(R.id.guessed_letters)
+        editText = view.findViewById(R.id.guess_text)
+        guessed = view.findViewById(R.id.guessed_letters)
         scoreText = view.findViewById(R.id.score)
-        var userGuess: String
+
 
         for (i in word.indices) {
             charList.add(Letter(word[i], false))
         }
-        var letterAdapter = LetterRecyclerAdapter(charList)
+        letterAdapter = LetterRecyclerAdapter(charList)
         letterRecyclerView.adapter = letterAdapter
 
         scoreText.setText("Score: " + game.score.toString())
@@ -58,28 +66,6 @@ class GameFragment : Fragment() {
 
 
         button.setOnClickListener {
-            userGuess = editText.text.toString().uppercase()
-            text.text = userGuess
-            for (i in guessedLetters.indices){
-                if(userGuess.equals(guessedLetters[i])){
-                    isGuessed = true
-                    break
-                }
-                else{
-                    isGuessed = false
-                }
-            }
-            if(!isGuessed){
-                guessedLetters.add(userGuess)
-                guessed.append(userGuess + " ")
-                for(i in word.indices){
-                    if(charList[i].letter.equals(userGuess)){
-                        charList[i] = Letter(word[i], true)
-                        letterAdapter.notifyDataSetChanged()
-                    }
-                }
-            }
-            editText.setText("")
             lykkehjulet()
         }
 
@@ -101,6 +87,28 @@ class GameFragment : Fragment() {
         return view
     }
     fun lykkehjulet(){
+        userGuess = editText.text.toString().uppercase()
+        text.text = userGuess
+        for (i in guessedLetters.indices){
+            if(userGuess.equals(guessedLetters[i])){
+                isGuessed = true
+                break
+            }
+            else{
+                isGuessed = false
+            }
+        }
+        if(!isGuessed){
+            guessedLetters.add(userGuess)
+            guessed.append(userGuess + " ")
+            for(i in word.indices){
+                if(charList[i].letter.equals(userGuess)){
+                    charList[i] = Letter(word[i], true)
+                    letterAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+        editText.setText("")
 
 
     }
