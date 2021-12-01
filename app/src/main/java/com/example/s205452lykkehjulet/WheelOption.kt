@@ -14,4 +14,8 @@ class WheelOption{
         MISS_TURN,
         BANKRUPT
     }
+
+    fun randomWheelOption(): WheelOption {
+        return WheelOption.values()[Random.nextInt(0, WheelOption.values().size)]
+    }
 }

@@ -9,21 +9,22 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.s205452lykkehjulet.*
 import com.example.s205452lykkehjulet.Adapters.LetterRecyclerAdapter
 import com.example.s205452lykkehjulet.Adapters.LifeRecyclerAdapter
-import kotlin.random.Random
+
 
 class GameFragment : Fragment() {
 
     private var charList = ArrayList<Letter>()
     private var guessedLetters = ArrayList<String>()
     private var isGuessed: Boolean = false
-    private var score: Int = 0
-
-    private var gameInProgress: Boolean = true
+    private var gamePhase = GamePhase.SPIN
+    private var multiplier: Int = 0
+    private var numberOfGuessedLetters: Int = 0
     private lateinit var scoreText: TextView
     private lateinit var lifeRecyclerView: RecyclerView
     private lateinit var userGuess: String
@@ -36,7 +37,7 @@ class GameFragment : Fragment() {
     val wordGenerator = Word()
 
 
-    var game = Game(5,0)
+    var game = Game(5, 0)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,13 +71,10 @@ class GameFragment : Fragment() {
         lifeRecyclerView.adapter = lifeAdapter
         //lifeAdapter.notifyDataSetChanged()
 
-
+        lykkehjulet()
         button.setOnClickListener {
             lykkehjulet()
         }
-
-
-
 
 
         // https://www.tutorialspoint.com/how-to-create-horizontal-listview-in-android-using-kotlin
@@ -92,45 +90,92 @@ class GameFragment : Fragment() {
 
         return view
     }
+
     fun lykkehjulet() {
-        var gamePhase = GamePhase.SPIN
-        var wheelOption: WheelOption.WheelOption
+
         userGuess = editText.text.toString().uppercase()
 
-            if (gamePhase == GamePhase.SPIN) {
-
-                button.text = "Spin the wheel!"
+        if(gamePhase == GamePhase.SPIN){
+            multiplier = 0
+            generateWheelOption()
+            if(multiplier>0) {
+                button.text = "Click to guess"
                 gamePhase = GamePhase.GUESS
             }
+        }
 
-            if (gamePhase == GamePhase.GUESS) {
+        else if(gamePhase == GamePhase.GUESS){
 
-                button.text = "Click to guess"
-                for (i in guessedLetters.indices) {
-                    if (userGuess.equals(guessedLetters[i])) {
-                        isGuessed = true
-                        break
-                    } else {
-                        isGuessed = false
+
+            for (i in guessedLetters.indices) {
+                if (userGuess.equals(guessedLetters[i])) {
+                    isGuessed = true
+                    break
+                } else {
+                    isGuessed = false
+                }
+            }
+            if (!isGuessed) {
+                guessedLetters.add(userGuess)
+                guessed.append(userGuess + " ")
+                numberOfGuessedLetters = 0
+                for (i in word.indices) {
+                    if (charList[i].letter.equals(userGuess)) {
+                        charList[i] = Letter(word[i], true)
+                        letterAdapter.notifyDataSetChanged()
+                        numberOfGuessedLetters++
                     }
                 }
-                if (!isGuessed) {
-                    guessedLetters.add(userGuess)
-                    guessed.append(userGuess + " ")
-                    for (i in word.indices) {
-                        if (charList[i].letter.equals(userGuess)) {
-                            charList[i] = Letter(word[i], true)
-                            letterAdapter.notifyDataSetChanged()
-                        }
-                    }
-                }
-
-                editText.setText("")
-                gamePhase = GamePhase.SPIN
+                game.score = game.score + (numberOfGuessedLetters*multiplier)
             }
 
+            editText.setText("")
+            button.text = "Spin the wheel!"
+            gamePhase = GamePhase.SPIN
 
         }
+    }
+
+    fun generateWheelOption(){
+        var wheelOption: WheelOption.WheelOption = WheelOption().randomWheelOption()
+        when(wheelOption.name){
+            WheelOption.WheelOption.POINTS_100 -> multiplier = 100
+            WheelOption.WheelOption.POINTS_500 -> multiplier = 500
+            WheelOption.WheelOption.POINTS_750 -> multiplier = 750
+            WheelOption.WheelOption.POINTS_1000 -> multiplier = 1000
+            WheelOption.WheelOption.POINTS_1500 -> multiplier = 1500
+            WheelOption.WheelOption.EXTRA_TURN -> {
+                game.life++
+                gamePhase = GamePhase.SPIN
+            }
+            WheelOption.WheelOption.MISS_TURN -> {
+                game.life--
+                gamePhase = GamePhase.SPIN
+            }
+            WheelOption.WheelOption.BANKRUPT -> {
+                game.score = 0
+                gamePhase = GamePhase.SPIN
+            }
+        }
+    }
+
+    fun winCondition(){
+        var isWon: Boolean = true
+        for(i in charList.indices){
+            if(!charList[i].visible){
+                isWon = false
+            }
+        }
+        if(isWon){
+            view?.let {Navigation.findNavController(it).navigate(R.id.navigation_end_message)}
+        }
+    }
+
+    fun loseCondition(){
+        if(game.life <= 0){
+            view?.let {Navigation.findNavController(it).navigate(R.id.navigation_end_message)}
+        }
+    }
 
 
 }
