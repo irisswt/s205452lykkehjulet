@@ -30,6 +30,8 @@ class GameFragment : Fragment() {
     private lateinit var guessed: TextView
     private lateinit var word: List<String>
     private lateinit var letterAdapter: LetterRecyclerAdapter
+    val wordGenerator = Word()
+
 
     var game = Game(5,0)
 
@@ -39,7 +41,7 @@ class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val wordGenerator = Word()
+
         word = wordGenerator.generateWord()
 
         // Inflate the layout for this fragment
@@ -60,9 +62,9 @@ class GameFragment : Fragment() {
         letterRecyclerView.adapter = letterAdapter
 
         scoreText.setText("Score: " + game.score.toString())
-        var lifeAdapter = LifeRecyclerAdapter(5)
+        var lifeAdapter = LifeRecyclerAdapter(game.life)
         lifeRecyclerView.adapter = lifeAdapter
-        lifeAdapter.notifyDataSetChanged()
+        //lifeAdapter.notifyDataSetChanged()
 
 
         button.setOnClickListener {
@@ -87,8 +89,9 @@ class GameFragment : Fragment() {
         return view
     }
     fun lykkehjulet(){
+        text.text = "Category: " + wordGenerator.getWordCategory().uppercase()
         userGuess = editText.text.toString().uppercase()
-        text.text = userGuess
+
         for (i in guessedLetters.indices){
             if(userGuess.equals(guessedLetters[i])){
                 isGuessed = true
