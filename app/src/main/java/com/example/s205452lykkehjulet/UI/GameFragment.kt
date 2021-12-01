@@ -1,6 +1,7 @@
 package com.example.s205452lykkehjulet.UI
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.s205452lykkehjulet.*
 import com.example.s205452lykkehjulet.Adapters.LetterRecyclerAdapter
 import com.example.s205452lykkehjulet.Adapters.LifeRecyclerAdapter
+import kotlin.random.Random
 
 class GameFragment : Fragment() {
 
@@ -20,7 +22,7 @@ class GameFragment : Fragment() {
     private var guessedLetters = ArrayList<String>()
     private var isGuessed: Boolean = false
     private var score: Int = 0
-    private var gamePhase = GamePhase.SPIN
+
     private var gameInProgress: Boolean = true
     private lateinit var scoreText: TextView
     private lateinit var lifeRecyclerView: RecyclerView
@@ -30,6 +32,7 @@ class GameFragment : Fragment() {
     private lateinit var guessed: TextView
     private lateinit var word: List<String>
     private lateinit var letterAdapter: LetterRecyclerAdapter
+    private lateinit var button: Button
     val wordGenerator = Word()
 
 
@@ -40,15 +43,16 @@ class GameFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
+        val view: View = inflater.inflate(R.layout.fragment_game, container, false)
+        button = view.findViewById(R.id.spin_button)
+        val letterRecyclerView: RecyclerView = view.findViewById(R.id.letter_recycler_view)
         word = wordGenerator.generateWord()
 
         // Inflate the layout for this fragment
-        val view: View = inflater.inflate(R.layout.fragment_game, container, false)
-        val button: Button = view.findViewById(R.id.spin_button)
+
         text = view.findViewById(R.id.spin_text)
-        val letterRecyclerView: RecyclerView = view.findViewById(R.id.letter_recycler_view)
+        text.text = "Category: " + wordGenerator.getWordCategory().uppercase()
+
         lifeRecyclerView = view.findViewById(R.id.life_recycler_view)
         editText = view.findViewById(R.id.guess_text)
         guessed = view.findViewById(R.id.guessed_letters)
@@ -88,32 +92,45 @@ class GameFragment : Fragment() {
 
         return view
     }
-    fun lykkehjulet(){
-        text.text = "Category: " + wordGenerator.getWordCategory().uppercase()
+    fun lykkehjulet() {
+        var gamePhase = GamePhase.SPIN
+        var wheelOption: WheelOption.WheelOption
         userGuess = editText.text.toString().uppercase()
 
-        for (i in guessedLetters.indices){
-            if(userGuess.equals(guessedLetters[i])){
-                isGuessed = true
-                break
+            if (gamePhase == GamePhase.SPIN) {
+
+                button.text = "Spin the wheel!"
+                gamePhase = GamePhase.GUESS
             }
-            else{
-                isGuessed = false
-            }
-        }
-        if(!isGuessed){
-            guessedLetters.add(userGuess)
-            guessed.append(userGuess + " ")
-            for(i in word.indices){
-                if(charList[i].letter.equals(userGuess)){
-                    charList[i] = Letter(word[i], true)
-                    letterAdapter.notifyDataSetChanged()
+
+            if (gamePhase == GamePhase.GUESS) {
+
+                button.text = "Click to guess"
+                for (i in guessedLetters.indices) {
+                    if (userGuess.equals(guessedLetters[i])) {
+                        isGuessed = true
+                        break
+                    } else {
+                        isGuessed = false
+                    }
                 }
+                if (!isGuessed) {
+                    guessedLetters.add(userGuess)
+                    guessed.append(userGuess + " ")
+                    for (i in word.indices) {
+                        if (charList[i].letter.equals(userGuess)) {
+                            charList[i] = Letter(word[i], true)
+                            letterAdapter.notifyDataSetChanged()
+                        }
+                    }
+                }
+
+                editText.setText("")
+                gamePhase = GamePhase.SPIN
             }
+
+
         }
-        editText.setText("")
 
-
-    }
 
 }
