@@ -146,15 +146,12 @@ class GameFragment : Fragment() {
             WheelOption.WheelOption.POINTS_1500 -> multiplier = 1500
             WheelOption.WheelOption.EXTRA_TURN -> {
                 game.life++
-                gamePhase = GamePhase.SPIN
             }
             WheelOption.WheelOption.MISS_TURN -> {
                 game.life--
-                gamePhase = GamePhase.SPIN
             }
             WheelOption.WheelOption.BANKRUPT -> {
                 game.score = 0
-                gamePhase = GamePhase.SPIN
             }
         }
     }
