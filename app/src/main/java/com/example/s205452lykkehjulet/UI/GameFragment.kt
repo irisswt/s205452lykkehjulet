@@ -1,5 +1,6 @@
 package com.example.s205452lykkehjulet.UI
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -34,8 +35,9 @@ class GameFragment : Fragment() {
     private lateinit var word: List<String>
     private lateinit var letterAdapter: LetterRecyclerAdapter
     private lateinit var button: Button
+    private lateinit var lifeAdapter: LifeRecyclerAdapter
     val wordGenerator = Word()
-
+    //private lateinit var intent: Intent
 
     var game = Game(5, 0)
 
@@ -48,7 +50,7 @@ class GameFragment : Fragment() {
         button = view.findViewById(R.id.spin_button)
         val letterRecyclerView: RecyclerView = view.findViewById(R.id.letter_recycler_view)
         word = wordGenerator.generateWord()
-
+      //  intent = Intent(view.context, MainActivity::class.java)
         // Inflate the layout for this fragment
 
         text = view.findViewById(R.id.spin_text)
@@ -67,7 +69,7 @@ class GameFragment : Fragment() {
         letterRecyclerView.adapter = letterAdapter
 
         scoreText.setText("Score: " + game.score.toString())
-        var lifeAdapter = LifeRecyclerAdapter(game.life)
+        lifeAdapter = LifeRecyclerAdapter(game.life)
         lifeRecyclerView.adapter = lifeAdapter
         //lifeAdapter.notifyDataSetChanged()
 
@@ -95,17 +97,17 @@ class GameFragment : Fragment() {
 
         userGuess = editText.text.toString().uppercase()
 
-        if(gamePhase == GamePhase.SPIN){
+        if (gamePhase == GamePhase.SPIN) {
             multiplier = 0
             generateWheelOption()
-            if(multiplier>0) {
+
+
+
+            if (multiplier > 0) {
                 button.text = "Click to guess"
                 gamePhase = GamePhase.GUESS
             }
-        }
-
-        else if(gamePhase == GamePhase.GUESS){
-
+        } else if (gamePhase == GamePhase.GUESS) {
 
             for (i in guessedLetters.indices) {
                 if (userGuess.equals(guessedLetters[i])) {
@@ -126,53 +128,54 @@ class GameFragment : Fragment() {
                         numberOfGuessedLetters++
                     }
                 }
-                game.score = game.score + (numberOfGuessedLetters*multiplier)
+                game.score = game.score + (numberOfGuessedLetters * multiplier)
+                scoreText.text = "Score: " + game.score
             }
 
             editText.setText("")
             button.text = "Spin the wheel!"
             gamePhase = GamePhase.SPIN
-
+            checkGameStatus()
         }
     }
 
-    fun generateWheelOption(){
+    fun generateWheelOption() {
         var wheelOption: WheelOption.WheelOption = WheelOption().randomWheelOption()
-        when(wheelOption.name){
+        when (wheelOption) {
             WheelOption.WheelOption.POINTS_100 -> multiplier = 100
             WheelOption.WheelOption.POINTS_500 -> multiplier = 500
             WheelOption.WheelOption.POINTS_750 -> multiplier = 750
             WheelOption.WheelOption.POINTS_1000 -> multiplier = 1000
             WheelOption.WheelOption.POINTS_1500 -> multiplier = 1500
-            WheelOption.WheelOption.EXTRA_TURN -> {
-                game.life++
-            }
-            WheelOption.WheelOption.MISS_TURN -> {
-                game.life--
-            }
-            WheelOption.WheelOption.BANKRUPT -> {
-                game.score = 0
-            }
+            WheelOption.WheelOption.EXTRA_TURN -> game.life++
+            WheelOption.WheelOption.MISS_TURN -> game.life--
+            WheelOption.WheelOption.BANKRUPT -> game.score = 0
         }
+        lifeRecyclerView.adapter = LifeRecyclerAdapter(game.life)
     }
 
-    fun winCondition(){
+    fun checkGameStatus(){
+        winCondition()
+        loseCondition()
+    }
+
+    fun winCondition() {
         var isWon: Boolean = true
-        for(i in charList.indices){
-            if(!charList[i].visible){
+        for (i in charList.indices) {
+            if (!charList[i].visible) {
                 isWon = false
             }
         }
-        if(isWon){
-            view?.let {Navigation.findNavController(it).navigate(R.id.navigation_end_message)}
+        if (isWon) {
+            view?.let { Navigation.findNavController(it).navigate(R.id.navigation_end_message) }
+         //   intent.putExtra("point",game.score.toString())
+
         }
     }
 
-    fun loseCondition(){
-        if(game.life <= 0){
-            view?.let {Navigation.findNavController(it).navigate(R.id.navigation_end_message)}
+    fun loseCondition() {
+        if (game.life <= 0) {
+            view?.let { Navigation.findNavController(it).navigate(R.id.navigation_end_message) }
         }
     }
-
-
 }
