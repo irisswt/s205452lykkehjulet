@@ -36,6 +36,7 @@ class GameFragment : Fragment() {
     private lateinit var letterAdapter: LetterRecyclerAdapter
     private lateinit var button: Button
     private lateinit var lifeAdapter: LifeRecyclerAdapter
+    private lateinit var optionText: TextView
     val wordGenerator = Word()
     //private lateinit var intent: Intent
 
@@ -52,7 +53,7 @@ class GameFragment : Fragment() {
         word = wordGenerator.generateWord()
       //  intent = Intent(view.context, MainActivity::class.java)
         // Inflate the layout for this fragment
-
+        optionText = view.findViewById(R.id.option_text)
         text = view.findViewById(R.id.spin_text)
         text.text = "Category: " + wordGenerator.getWordCategory().uppercase()
 
@@ -121,12 +122,18 @@ class GameFragment : Fragment() {
                 guessedLetters.add(userGuess)
                 guessed.append(userGuess + " ")
                 numberOfGuessedLetters = 0
+                var letterExists: Boolean = false
                 for (i in word.indices) {
                     if (charList[i].letter.equals(userGuess)) {
                         charList[i] = Letter(word[i], true)
                         letterAdapter.notifyDataSetChanged()
                         numberOfGuessedLetters++
+                        letterExists = true
                     }
+                }
+                if(!letterExists){
+                    game.life--
+                    lifeRecyclerView.adapter = LifeRecyclerAdapter(game.life)
                 }
                 game.score = game.score + (numberOfGuessedLetters * multiplier)
                 scoreText.text = "Score: " + game.score
@@ -142,14 +149,38 @@ class GameFragment : Fragment() {
     fun generateWheelOption() {
         var wheelOption: WheelOption.WheelOption = WheelOption().randomWheelOption()
         when (wheelOption) {
-            WheelOption.WheelOption.POINTS_100 -> multiplier = 100
-            WheelOption.WheelOption.POINTS_500 -> multiplier = 500
-            WheelOption.WheelOption.POINTS_750 -> multiplier = 750
-            WheelOption.WheelOption.POINTS_1000 -> multiplier = 1000
-            WheelOption.WheelOption.POINTS_1500 -> multiplier = 1500
-            WheelOption.WheelOption.EXTRA_TURN -> game.life++
-            WheelOption.WheelOption.MISS_TURN -> game.life--
-            WheelOption.WheelOption.BANKRUPT -> game.score = 0
+            WheelOption.WheelOption.POINTS_100 -> {
+                multiplier = 100
+                optionText.text = "Spin: 100 Points"
+            }
+            WheelOption.WheelOption.POINTS_500 -> {
+                multiplier = 500
+                optionText.text = "Spin: 500 Points"
+            }
+            WheelOption.WheelOption.POINTS_750 -> {
+                multiplier = 750
+                optionText.text = "Spin: 750 Points"
+            }
+            WheelOption.WheelOption.POINTS_1000 -> {
+                multiplier = 1000
+                optionText.text = "Spin: 1000 Points"
+            }
+            WheelOption.WheelOption.POINTS_1500 -> {
+                multiplier = 1500
+                optionText.text = "Spin: 1500 Points"
+            }
+            WheelOption.WheelOption.EXTRA_TURN -> {
+                game.life++
+                optionText.text = "Spin: You gained a life"
+            }
+            WheelOption.WheelOption.MISS_TURN -> {
+                game.life--
+                optionText.text = "Spin: You lost a life"
+            }
+            WheelOption.WheelOption.BANKRUPT -> {
+                game.score = 0
+                optionText.text = "Spin: Bankrupt! You lost all your points"
+            }
         }
         lifeRecyclerView.adapter = LifeRecyclerAdapter(game.life)
     }
