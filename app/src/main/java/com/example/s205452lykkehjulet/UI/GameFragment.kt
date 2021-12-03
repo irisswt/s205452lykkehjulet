@@ -202,11 +202,10 @@ class GameFragment : Fragment() {
             }
         }
         if (isWon) {
-            val intent = Intent(view?.context, MainActivity::class.java)
+            val intent = Intent(view?.context, EndMessageActivity::class.java)
             intent.putExtra("point", game.score)
             intent.putExtra("isGameWon", isWon)
             view?.context?.startActivity(intent)
-
             view?.let { Navigation.findNavController(it).navigate(R.id.navigation_end_message) }
 
 
@@ -215,7 +214,7 @@ class GameFragment : Fragment() {
 
     fun loseCondition() {
         if (game.life <= 0) {
-            val intent = Intent(view?.context, MainActivity::class.java)
+            val intent = Intent(view?.context, EndMessageActivity::class.java)
             intent.putExtra("point", game.score)
             intent.putExtra("isGameWon", false)
             view?.context?.startActivity(intent)

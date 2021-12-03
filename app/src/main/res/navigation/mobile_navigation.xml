@@ -11,11 +11,11 @@
         android:label="@string/title_game"
         tools:layout="@layout/fragment_game" />
 
-    <fragment
+    <activity
         android:id="@+id/navigation_end_message"
         android:name="com.example.s205452lykkehjulet.UI.EndMessageActivity"
         android:label="@string/title_end_message"
-        tools:layout="@layout/fragment_end_message" />
+        tools:layout="@layout/activity_end_message" />
 
     <fragment
         android:id="@+id/navigation_highscore"
