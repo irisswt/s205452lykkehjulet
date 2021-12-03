@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_end_message"
-        android:name="com.example.s205452lykkehjulet.UI.EndMessageFragment"
+        android:name="com.example.s205452lykkehjulet.UI.EndMessageActivity"
         android:label="@string/title_end_message"
         tools:layout="@layout/fragment_end_message" />
 

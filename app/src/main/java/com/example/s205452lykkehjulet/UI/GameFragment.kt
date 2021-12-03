@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,7 @@ class GameFragment : Fragment() {
     val wordGenerator = Word()
     //private lateinit var intent: Intent
 
+    lateinit var bundle: Bundle
     var game = Game(5, 0)
 
     override fun onCreateView(
@@ -51,7 +53,7 @@ class GameFragment : Fragment() {
         button = view.findViewById(R.id.spin_button)
         val letterRecyclerView: RecyclerView = view.findViewById(R.id.letter_recycler_view)
         word = wordGenerator.generateWord()
-      //  intent = Intent(view.context, MainActivity::class.java)
+        //  intent = Intent(view.context, MainActivity::class.java)
         // Inflate the layout for this fragment
         optionText = view.findViewById(R.id.option_text)
         text = view.findViewById(R.id.spin_text)
@@ -61,7 +63,7 @@ class GameFragment : Fragment() {
         editText = view.findViewById(R.id.guess_text)
         guessed = view.findViewById(R.id.guessed_letters)
         scoreText = view.findViewById(R.id.score)
-
+        //   bundle = Bundle(2)
 
         for (i in word.indices) {
             charList.add(Letter(word[i], false))
@@ -131,7 +133,7 @@ class GameFragment : Fragment() {
                         letterExists = true
                     }
                 }
-                if(!letterExists){
+                if (!letterExists) {
                     game.life--
                     lifeRecyclerView.adapter = LifeRecyclerAdapter(game.life)
                 }
@@ -180,17 +182,19 @@ class GameFragment : Fragment() {
             WheelOption.WheelOption.BANKRUPT -> {
                 game.score = 0
                 optionText.text = "Spin: Bankrupt! You lost all your points"
+                scoreText.text = "Score: " + game.score
             }
         }
         lifeRecyclerView.adapter = LifeRecyclerAdapter(game.life)
     }
 
-    fun checkGameStatus(){
+    fun checkGameStatus() {
         winCondition()
         loseCondition()
     }
 
     fun winCondition() {
+        bundle = Bundle(2)
         var isWon: Boolean = true
         for (i in charList.indices) {
             if (!charList[i].visible) {
@@ -198,14 +202,24 @@ class GameFragment : Fragment() {
             }
         }
         if (isWon) {
+            val intent = Intent(view?.context, MainActivity::class.java)
+            intent.putExtra("point", game.score)
+            intent.putExtra("isGameWon", isWon)
+            view?.context?.startActivity(intent)
+
             view?.let { Navigation.findNavController(it).navigate(R.id.navigation_end_message) }
-         //   intent.putExtra("point",game.score.toString())
+
 
         }
     }
 
     fun loseCondition() {
         if (game.life <= 0) {
+            val intent = Intent(view?.context, MainActivity::class.java)
+            intent.putExtra("point", game.score)
+            intent.putExtra("isGameWon", false)
+            view?.context?.startActivity(intent)
+
             view?.let { Navigation.findNavController(it).navigate(R.id.navigation_end_message) }
         }
     }
