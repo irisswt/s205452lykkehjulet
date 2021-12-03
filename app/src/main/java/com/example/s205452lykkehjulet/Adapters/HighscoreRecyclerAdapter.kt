@@ -13,18 +13,11 @@ class HighscoreRecyclerAdapter: RecyclerView.Adapter<HighscoreRecyclerAdapter.Vi
         return ViewHolder(inflater)
     }
 
-
     inner class ViewHolder(cardView: View): RecyclerView.ViewHolder(cardView){
-
-
-        init{
-
-        }
+        init{}
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {}
 
     override fun getItemCount(): Int {
         TODO("Not yet implemented")

@@ -14,13 +14,9 @@ class LifeRecyclerAdapter(var lives: Int): RecyclerView.Adapter<LifeRecyclerAdap
     }
 
 
-    class LifeViewHolder(cardView: View): RecyclerView.ViewHolder(cardView){
+    class LifeViewHolder(cardView: View): RecyclerView.ViewHolder(cardView){}
 
-    }
-
-    override fun onBindViewHolder(holder: LifeViewHolder, position: Int) {
-
-    }
+    override fun onBindViewHolder(holder: LifeViewHolder, position: Int) {}
 
     override fun getItemCount(): Int {
         return lives

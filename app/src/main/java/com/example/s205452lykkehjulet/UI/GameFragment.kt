@@ -39,9 +39,6 @@ class GameFragment : Fragment() {
     private lateinit var lifeAdapter: LifeRecyclerAdapter
     private lateinit var optionText: TextView
     val wordGenerator = Word()
-    //private lateinit var intent: Intent
-
-    lateinit var bundle: Bundle
     var game = Game(5, 0)
 
     override fun onCreateView(
@@ -53,46 +50,32 @@ class GameFragment : Fragment() {
         button = view.findViewById(R.id.spin_button)
         val letterRecyclerView: RecyclerView = view.findViewById(R.id.letter_recycler_view)
         word = wordGenerator.generateWord()
-        //  intent = Intent(view.context, MainActivity::class.java)
-        // Inflate the layout for this fragment
         optionText = view.findViewById(R.id.option_text)
         text = view.findViewById(R.id.spin_text)
         text.text = "Category: " + wordGenerator.getWordCategory().uppercase()
-
         lifeRecyclerView = view.findViewById(R.id.life_recycler_view)
         editText = view.findViewById(R.id.guess_text)
         guessed = view.findViewById(R.id.guessed_letters)
         scoreText = view.findViewById(R.id.score)
-        //   bundle = Bundle(2)
-
         for (i in word.indices) {
             charList.add(Letter(word[i], false))
         }
         letterAdapter = LetterRecyclerAdapter(charList)
         letterRecyclerView.adapter = letterAdapter
-
         scoreText.setText("Score: " + game.score.toString())
         lifeAdapter = LifeRecyclerAdapter(game.life)
         lifeRecyclerView.adapter = lifeAdapter
-        //lifeAdapter.notifyDataSetChanged()
-
         lykkehjulet()
         button.setOnClickListener {
             lykkehjulet()
         }
-
-
         // https://www.tutorialspoint.com/how-to-create-horizontal-listview-in-android-using-kotlin
         val letterLinearLayoutManager = LinearLayoutManager(view.context)
         letterLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         letterRecyclerView.layoutManager = letterLinearLayoutManager
-
         val lifeLinearLayoutManager = LinearLayoutManager(view.context)
         lifeLinearLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
         lifeRecyclerView.layoutManager = lifeLinearLayoutManager
-
-
-
         return view
     }
 
@@ -140,7 +123,6 @@ class GameFragment : Fragment() {
                 game.score = game.score + (numberOfGuessedLetters * multiplier)
                 scoreText.text = "Score: " + game.score
             }
-
             editText.setText("")
             button.text = "Spin the wheel!"
             gamePhase = GamePhase.SPIN
@@ -194,7 +176,6 @@ class GameFragment : Fragment() {
     }
 
     fun winCondition() {
-
         var isWon: Boolean = true
         for (i in charList.indices) {
             if (!charList[i].visible) {
@@ -205,11 +186,8 @@ class GameFragment : Fragment() {
             val intent = Intent(view?.context, EndMessageActivity::class.java)
             intent.putExtra("point", game.score)
             intent.putExtra("isGameWon", isWon)
-            Log.e("won", "point: " + game.score + "\nisWon: " + isWon )
+            Log.e("won", "point: " + game.score + "\nisWon: " + isWon)
             startActivity(intent)
-            //view?.let { Navigation.findNavController(it).navigate(R.id.navigation_end_message) }
-            
-
         }
     }
 
@@ -219,10 +197,8 @@ class GameFragment : Fragment() {
             val isGameWon: Boolean = false
             intent.putExtra("point", game.score)
             intent.putExtra("isGameWon", isGameWon)
-            Log.e("lost", "point: " + game.score + "\nisWon: " + isGameWon )
+            Log.e("lost", "point: " + game.score + "\nisWon: " + isGameWon)
             startActivity(intent)
-
-            //view?.let { Navigation.findNavController(it).navigate(R.id.navigation_end_message) }
         }
     }
 }

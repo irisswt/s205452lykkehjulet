@@ -33,7 +33,7 @@ class EndMessageActivity : AppCompatActivity() {
         endMessageMessage.append("Here's your score: $gameScore")
 
         playAgainButton.setOnClickListener(){
-            var intentTwo: Intent = Intent(this,MainActivity::class.java)
+            var intentTwo = Intent(this,MainActivity::class.java)
             startActivity(intentTwo)
         }
     }

@@ -14,11 +14,8 @@ class LetterRecyclerAdapter(private val dataset: List<Letter>): RecyclerView.Ada
         return LetterViewHolder(inflater)
     }
 
-
     class LetterViewHolder(cardView: View): RecyclerView.ViewHolder(cardView){
         val letterText: TextView = cardView.findViewById(R.id.letterText)
-
-
     }
 
     override fun onBindViewHolder(holder: LetterViewHolder, position: Int) {
