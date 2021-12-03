@@ -5,7 +5,7 @@ import kotlin.random.Random
 
 class Word {
     val categories = listOf<String>("Country", "City", "Codelanguage")
-    val country = listOf<String>("Danmark", "Sverige")
+    val country = listOf<String>("Denmark", "Sweden", "England", "Germany")
     val city = listOf<String>("Ballerup", "Lyngby", "London", "Berlin")
     val codelanguage = listOf<String>("Kotlin", "Java", "Python")
     var splitWord: List<String> = listOf()
