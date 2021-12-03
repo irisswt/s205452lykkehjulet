@@ -194,7 +194,7 @@ class GameFragment : Fragment() {
     }
 
     fun winCondition() {
-        bundle = Bundle(2)
+
         var isWon: Boolean = true
         for (i in charList.indices) {
             if (!charList[i].visible) {
@@ -205,9 +205,10 @@ class GameFragment : Fragment() {
             val intent = Intent(view?.context, EndMessageActivity::class.java)
             intent.putExtra("point", game.score)
             intent.putExtra("isGameWon", isWon)
-            view?.context?.startActivity(intent)
-            view?.let { Navigation.findNavController(it).navigate(R.id.navigation_end_message) }
-
+            Log.e("won", "point: " + game.score + "\nisWon: " + isWon )
+            startActivity(intent)
+            //view?.let { Navigation.findNavController(it).navigate(R.id.navigation_end_message) }
+            
 
         }
     }
@@ -215,11 +216,13 @@ class GameFragment : Fragment() {
     fun loseCondition() {
         if (game.life <= 0) {
             val intent = Intent(view?.context, EndMessageActivity::class.java)
+            val isGameWon: Boolean = false
             intent.putExtra("point", game.score)
-            intent.putExtra("isGameWon", false)
-            view?.context?.startActivity(intent)
+            intent.putExtra("isGameWon", isGameWon)
+            Log.e("lost", "point: " + game.score + "\nisWon: " + isGameWon )
+            startActivity(intent)
 
-            view?.let { Navigation.findNavController(it).navigate(R.id.navigation_end_message) }
+            //view?.let { Navigation.findNavController(it).navigate(R.id.navigation_end_message) }
         }
     }
 }
